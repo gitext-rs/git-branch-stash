@@ -1,5 +1,6 @@
 pub use super::Snapshot;
 
+/// Manage branch snapshots on disk
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Stack {
     pub name: String,
@@ -11,6 +12,7 @@ impl Stack {
     pub const DEFAULT_STACK: &'static str = "recent";
     const EXT: &'static str = "bak";
 
+    /// Create a named stack of snapshots
     pub fn new(name: &str, repo: &crate::git::GitRepo) -> Self {
         let root = stack_root(repo.raw().path(), name);
         let name = name.to_owned();
@@ -21,6 +23,7 @@ impl Stack {
         }
     }
 
+    /// Discover all stacks of snapshots
     pub fn all(repo: &crate::git::GitRepo) -> impl Iterator<Item = Self> {
         let root = stacks_root(repo.raw().path());
         let mut stacks: Vec<_> = std::fs::read_dir(root)
@@ -45,10 +48,12 @@ impl Stack {
         stacks.into_iter()
     }
 
+    /// Change the capacity of the stack
     pub fn capacity(&mut self, capacity: Option<usize>) {
         self.capacity = capacity;
     }
 
+    /// Discover snapshots within this stack
     pub fn iter(&self) -> impl DoubleEndedIterator<Item = std::path::PathBuf> {
         let mut elements: Vec<(usize, std::path::PathBuf)> = std::fs::read_dir(&self.root)
             .into_iter()
@@ -66,6 +71,7 @@ impl Stack {
         elements.into_iter().map(|(_, p)| p)
     }
 
+    /// Add a snapshot to this stack
     pub fn push(&mut self, snapshot: Snapshot) -> Result<std::path::PathBuf, std::io::Error> {
         let elems: Vec<_> = self.iter().collect();
         let last_path = elems.iter().last();
@@ -112,10 +118,12 @@ impl Stack {
         Ok(new_path)
     }
 
+    /// Empty the snapshot stack
     pub fn clear(&mut self) {
         let _ = std::fs::remove_dir_all(&self.root);
     }
 
+    /// Remove the most recent snapshot from the stack
     pub fn pop(&mut self) -> Option<std::path::PathBuf> {
         let mut elems: Vec<_> = self.iter().collect();
         let last = elems.pop()?;
@@ -123,6 +131,7 @@ impl Stack {
         Some(last)
     }
 
+    /// View the most recent snapshot in the stack
     pub fn peek(&mut self) -> Option<std::path::PathBuf> {
         self.iter().last()
     }

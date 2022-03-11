@@ -1,3 +1,4 @@
+/// State of all branches
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct Snapshot {
     pub branches: Vec<Branch>,
@@ -7,6 +8,7 @@ pub struct Snapshot {
 }
 
 impl Snapshot {
+    /// Load branch state from a file
     pub fn load(path: &std::path::Path) -> Result<Self, std::io::Error> {
         let file = std::fs::File::open(path)?;
         let reader = std::io::BufReader::new(file);
@@ -14,12 +16,14 @@ impl Snapshot {
         Ok(b)
     }
 
+    /// Save branch state to a file
     pub fn save(&self, path: &std::path::Path) -> Result<(), std::io::Error> {
         let s = serde_json::to_string_pretty(self)?;
         std::fs::write(path, &s)?;
         Ok(())
     }
 
+    /// Extract branch state from an existing repo
     pub fn from_repo(repo: &dyn crate::git::Repo) -> Result<Self, git2::Error> {
         let mut branches: Vec<_> = repo
             .local_branches()
@@ -41,6 +45,7 @@ impl Snapshot {
         Ok(Self { branches, metadata })
     }
 
+    /// Update repo to match the branch state
     pub fn apply(&self, repo: &mut dyn crate::git::Repo) -> Result<(), git2::Error> {
         let head_branch = repo.head_branch();
         let head_branch_name = head_branch.as_ref().map(|b| b.name.as_str());
@@ -63,6 +68,7 @@ impl Snapshot {
         Ok(())
     }
 
+    /// Add message metadata
     pub fn insert_message(&mut self, message: &str) {
         self.metadata.insert(
             "message".to_owned(),
@@ -70,6 +76,7 @@ impl Snapshot {
         );
     }
 
+    /// Add branch-relationship metadata
     pub fn insert_parent(
         &mut self,
         repo: &dyn crate::git::Repo,
@@ -89,6 +96,7 @@ impl Snapshot {
     }
 }
 
+/// State of an individual branch
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct Branch {
     pub name: String,
