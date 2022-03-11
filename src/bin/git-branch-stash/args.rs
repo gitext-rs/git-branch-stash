@@ -40,7 +40,7 @@ pub enum Subcommand {
 #[derive(clap::Args)]
 pub struct PushArgs {
     /// Specify which stash stack to use
-    #[clap(default_value = git_stack::stash::Stack::DEFAULT_STACK)]
+    #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 
     /// Annotate the snapshot with the given message
@@ -51,28 +51,28 @@ pub struct PushArgs {
 #[derive(clap::Args)]
 pub struct ListArgs {
     /// Specify which stash stack to use
-    #[clap(default_value = git_stack::stash::Stack::DEFAULT_STACK)]
+    #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 }
 
 #[derive(clap::Args)]
 pub struct ClearArgs {
     /// Specify which stash stack to use
-    #[clap(default_value = git_stack::stash::Stack::DEFAULT_STACK)]
+    #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 }
 
 #[derive(clap::Args)]
 pub struct DropArgs {
     /// Specify which stash stack to use
-    #[clap(default_value = git_stack::stash::Stack::DEFAULT_STACK)]
+    #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 }
 
 #[derive(clap::Args)]
 pub struct ApplyArgs {
     /// Specify which stash stack to use
-    #[clap(default_value = git_stack::stash::Stack::DEFAULT_STACK)]
+    #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 }
 

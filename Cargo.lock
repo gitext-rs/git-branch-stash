@@ -326,36 +326,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "78cc372d058dcf6d5ecd98510e7fbc9e5aec4d21de70f65fea8fecebcd881bd4"
 
 [[package]]
-name = "git-config-env"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a180ccba9ddee48fee20648bc5c40789503b2500b8283810b714c06092c1e8cf"
-dependencies = [
- "itertools",
- "nom",
-]
-
-[[package]]
-name = "git-fixture"
-version = "0.2.1"
-dependencies = [
- "assert_cmd",
- "bstr",
- "clap",
- "derive_more",
- "eyre",
- "humantime",
- "humantime-serde",
- "proc-exit",
- "schemars",
- "serde",
- "serde_json",
- "serde_yaml",
- "toml",
-]
-
-[[package]]
-name = "git-stack"
+name = "git-branch-stash"
 version = "0.6.0"
 dependencies = [
  "assert_fs",
@@ -381,6 +352,37 @@ dependencies = [
  "serde_json",
  "termtree",
  "yansi",
+]
+
+[[package]]
+name = "git-config-env"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a180ccba9ddee48fee20648bc5c40789503b2500b8283810b714c06092c1e8cf"
+dependencies = [
+ "itertools",
+ "nom",
+]
+
+[[package]]
+name = "git-fixture"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5194c7957120b48e53fe5320e6f5beb088dfb88d47337a53d724cf226de38191"
+dependencies = [
+ "assert_cmd",
+ "bstr",
+ "clap",
+ "derive_more",
+ "eyre",
+ "humantime",
+ "humantime-serde",
+ "proc-exit",
+ "schemars",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "toml",
 ]
 
 [[package]]

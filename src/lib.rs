@@ -2,6 +2,9 @@
 
 pub mod config;
 pub mod git;
-pub mod graph;
-pub mod log;
-pub mod stash;
+
+pub use snapshot::*;
+pub use stack::*;
+
+mod snapshot;
+mod stack;

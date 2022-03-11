@@ -1,15 +1,10 @@
-[workspace]
-members = [
-    "crates/git-fixture",
-]
-
 [package]
-name = "git-stack"
-description = "Stacked branch management for Git"
+name = "git-branch-stash"
+description = "Manage snapshots of your working directory"
 version = "0.6.0"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/epage/git-stack.git"
-documentation = "https://github.com/epage/git-stack.git"
+repository = "https://github.com/gitext-rs/git-branch-stash.git"
+documentation = "https://github.com/gitext-rs/git-branch-stash.git"
 readme = "README.md"
 categories = ["command-line-interface", "development-tools"]
 keywords = ["git", "cli"]
@@ -17,6 +12,7 @@ edition = "2018"
 include = [
   "src/**/*",
   "Cargo.toml",
+  "Cargo.lock",
   "LICENSE*",
   "README.md",
   "examples/**/*"
@@ -28,7 +24,7 @@ pre-release-replacements = [
   {file="CHANGELOG.md", search="\\.\\.\\.HEAD", replace="...{{tag_name}}", exactly=1},
   {file="CHANGELOG.md", search="ReleaseDate", replace="{{date}}", min=1},
   {file="CHANGELOG.md", search="<!-- next-header -->", replace="<!-- next-header -->\n## [Unreleased] - ReleaseDate\n", exactly=1},
-  {file="CHANGELOG.md", search="<!-- next-url -->", replace="<!-- next-url -->\n[Unreleased]: https://github.com/epage/git-stack/compare/{{tag_name}}...HEAD", exactly=1},
+  {file="CHANGELOG.md", search="<!-- next-url -->", replace="<!-- next-url -->\n[Unreleased]: https://github.com/gitext-rs/git-branch-stash/compare/{{tag_name}}...HEAD", exactly=1},
 ]
 
 [dependencies]
@@ -55,5 +51,5 @@ bstr = "0.2"
 maplit = "1"
 
 [dev-dependencies]
-git-fixture = { version = "^0.2", path = "crates/git-fixture" }
+git-fixture = { version = "0.2" }
 assert_fs = "1"

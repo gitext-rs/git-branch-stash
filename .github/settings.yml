@@ -1,7 +1,7 @@
 # These settings are synced to GitHub by https://probot.github.io/apps/settings/
 
 repository:
-  description: Stacked branch management for Git
+  description: Manage snapshots of your working directory
   topics: git rust cli
   has_issues: true
   has_projects: false
