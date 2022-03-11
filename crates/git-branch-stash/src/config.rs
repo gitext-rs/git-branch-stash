@@ -124,10 +124,8 @@ impl RepoConfig {
 
     fn from_defaults_internal(config: Option<&git2::Config>) -> Self {
         let mut conf = Self::default();
-        conf.capacity = Some(DEFAULT_CAPACITY);
 
         let mut protected_branches: Vec<String> = Vec::new();
-
         if let Some(config) = config {
             let default_branch = default_branch(config);
             let default_branch_ignore = default_branch.to_owned();
@@ -137,6 +135,8 @@ impl RepoConfig {
         // default protected branches
         protected_branches.extend(DEFAULT_PROTECTED_BRANCHES.iter().map(|s| (*s).to_owned()));
         conf.protected_branches = Some(protected_branches);
+
+        conf.capacity = Some(DEFAULT_CAPACITY);
 
         conf
     }
