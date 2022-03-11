@@ -1,5 +1,5 @@
 #[derive(clap::Parser)]
-#[clap(about, author, version)]
+#[clap(name = "git-branch-stash", about, author, version)]
 #[clap(
         setting = clap::AppSettings::DeriveDisplayOrder,
         dont_collapse_args_in_usage = true,
