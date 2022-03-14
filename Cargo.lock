@@ -279,6 +279,7 @@ dependencies = [
  "git-branch-stash",
  "git2",
  "human-panic",
+ "itertools",
  "log",
  "proc-exit",
  "serde_json",
