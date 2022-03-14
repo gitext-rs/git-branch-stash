@@ -49,22 +49,45 @@ impl Snapshot {
     pub fn apply(&self, repo: &mut crate::git::GitRepo) -> Result<(), git2::Error> {
         let head_branch = repo.head_branch();
         let head_branch_name = head_branch.as_ref().map(|b| b.name.as_str());
+
+        let mut planned_changes = Vec::new();
         for branch in self.branches.iter() {
             let existing = repo.find_local_branch(&branch.name);
-            if existing.map(|b| b.id) == Some(branch.id) {
+            if existing.as_ref().map(|b| b.id) == Some(branch.id) {
                 log::trace!("No change for {}", branch.name);
             } else {
-                if head_branch_name == Some(branch.name.as_str()) {
-                    log::debug!("Restoring {} (HEAD)", branch.name);
-                    repo.detach()?;
-                    repo.branch(&branch.name, branch.id)?;
-                    repo.switch(&branch.name)?;
-                } else {
-                    log::debug!("Restoring {}", branch.name);
-                    repo.branch(&branch.name, branch.id)?;
-                }
+                let existing_id = existing.map(|b| b.id).unwrap_or_else(|| git2::Oid::zero());
+                let new_id = branch.id;
+                planned_changes.push((existing_id, new_id, branch.name.as_str()));
             }
         }
+
+        let transaction_repo = git2::Repository::open(repo.raw().path())?;
+        let hooks = git2_ext::hooks::Hooks::with_repo(&transaction_repo)?;
+        let transaction = hooks
+            .run_reference_transaction(&transaction_repo, &planned_changes)
+            .map_err(|err| {
+                git2::Error::new(
+                    git2::ErrorCode::GenericError,
+                    git2::ErrorClass::Callback,
+                    err.to_string(),
+                )
+            })?;
+
+        for (_old_id, new_id, name) in &planned_changes {
+            if head_branch_name == Some(name) {
+                log::debug!("Restoring {} (HEAD)", name);
+                repo.detach()?;
+                repo.branch(name, *new_id)?;
+                repo.switch(name)?;
+            } else {
+                log::debug!("Restoring {}", name);
+                repo.branch(name, *new_id)?;
+            }
+        }
+
+        transaction.committed();
+
         Ok(())
     }
 
