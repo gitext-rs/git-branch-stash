@@ -24,7 +24,7 @@ impl Snapshot {
     }
 
     /// Extract branch state from an existing repo
-    pub fn from_repo(repo: &dyn crate::git::Repo) -> Result<Self, git2::Error> {
+    pub fn from_repo(repo: &crate::git::GitRepo) -> Result<Self, git2::Error> {
         let mut branches: Vec<_> = repo
             .local_branches()
             .map(|b| {
@@ -46,7 +46,7 @@ impl Snapshot {
     }
 
     /// Update repo to match the branch state
-    pub fn apply(&self, repo: &mut dyn crate::git::Repo) -> Result<(), git2::Error> {
+    pub fn apply(&self, repo: &mut crate::git::GitRepo) -> Result<(), git2::Error> {
         let head_branch = repo.head_branch();
         let head_branch_name = head_branch.as_ref().map(|b| b.name.as_str());
         for branch in self.branches.iter() {
@@ -79,7 +79,7 @@ impl Snapshot {
     /// Add branch-relationship metadata
     pub fn insert_parent(
         &mut self,
-        repo: &dyn crate::git::Repo,
+        repo: &crate::git::GitRepo,
         branches: &crate::git::Branches,
         protected_branches: &crate::git::Branches,
     ) {

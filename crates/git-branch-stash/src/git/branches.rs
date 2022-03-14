@@ -17,7 +17,7 @@ impl Branches {
         }
     }
 
-    pub fn update(&mut self, repo: &dyn crate::git::Repo) {
+    pub fn update(&mut self, repo: &crate::git::GitRepo) {
         let mut new = Self::new(
             self.branches
                 .values()
@@ -74,7 +74,7 @@ impl Branches {
         self.clone()
     }
 
-    pub fn descendants(&self, repo: &dyn crate::git::Repo, base_oid: git2::Oid) -> Self {
+    pub fn descendants(&self, repo: &crate::git::GitRepo, base_oid: git2::Oid) -> Self {
         let branches = self
             .branches
             .iter()
@@ -108,7 +108,7 @@ impl Branches {
 
     pub fn dependents(
         &self,
-        repo: &dyn crate::git::Repo,
+        repo: &crate::git::GitRepo,
         base_oid: git2::Oid,
         head_oid: git2::Oid,
     ) -> Self {
@@ -160,7 +160,7 @@ impl Branches {
 
     pub fn branch(
         &self,
-        repo: &dyn crate::git::Repo,
+        repo: &crate::git::GitRepo,
         base_oid: git2::Oid,
         head_oid: git2::Oid,
     ) -> Self {
@@ -248,7 +248,7 @@ impl IntoIterator for Branches {
 }
 
 pub fn find_protected_base<'b>(
-    repo: &dyn crate::git::Repo,
+    repo: &crate::git::GitRepo,
     protected_branches: &'b Branches,
     head_oid: git2::Oid,
 ) -> Option<&'b crate::git::Branch> {
@@ -275,7 +275,7 @@ pub fn find_protected_base<'b>(
 }
 
 pub fn find_base<'b>(
-    repo: &dyn crate::git::Repo,
+    repo: &crate::git::GitRepo,
     branches: &'b Branches,
     head_oid: git2::Oid,
 ) -> Option<&'b crate::git::Branch> {
