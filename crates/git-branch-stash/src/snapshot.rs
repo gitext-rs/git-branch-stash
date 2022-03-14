@@ -56,7 +56,7 @@ impl Snapshot {
             if existing.as_ref().map(|b| b.id) == Some(branch.id) {
                 log::trace!("No change for {}", branch.name);
             } else {
-                let existing_id = existing.map(|b| b.id).unwrap_or_else(|| git2::Oid::zero());
+                let existing_id = existing.map(|b| b.id).unwrap_or_else(git2::Oid::zero);
                 let new_id = branch.id;
                 planned_changes.push((existing_id, new_id, branch.name.as_str()));
             }
