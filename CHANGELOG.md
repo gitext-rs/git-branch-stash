@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Breaking Changes
+
+- API was simplifi3ed
+
+### Fixes
+
+- Runs `reference-transaction` hook
+
 ## [0.7.0] - 2022-03-11
 
 ## [0.6.0] - 2022-03-01
