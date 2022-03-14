@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [0.8.0] - 2022-03-14
+
 ### Breaking Changes
 
 - API was simplifi3ed
@@ -302,7 +304,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `full` -> `commits`
 
 <!-- next-url -->
-[Unreleased]: https://github.com/gitext-rs/git-branch-stash/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/gitext-rs/git-branch-stash/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/gitext-rs/git-branch-stash/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/gitext-rs/git-branch-stash/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/gitext-rs/git-branch-stash/compare/v0.5.6...v0.6.0
 [0.5.6]: https://github.com/gitext-rs/git-branch-stash/compare/v0.5.5...v0.5.6
