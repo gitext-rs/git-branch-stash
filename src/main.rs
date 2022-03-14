@@ -55,12 +55,6 @@ fn push(args: args::PushArgs) -> proc_exit::ExitResult {
 
     let repo_config = git_branch_stash::config::RepoConfig::from_all(repo.raw())
         .with_code(proc_exit::Code::CONFIG_ERR)?;
-    let protected = git_branch_stash::git::ProtectedBranches::new(
-        repo_config.protected_branches().iter().map(|s| s.as_str()),
-    )
-    .with_code(proc_exit::Code::USAGE_ERR)?;
-    let branches = git_branch_stash::git::Branches::new(repo.local_branches());
-    let protected_branches = branches.protected(&protected);
 
     stack.capacity(repo_config.capacity());
 
@@ -73,7 +67,6 @@ fn push(args: args::PushArgs) -> proc_exit::ExitResult {
     if let Some(message) = args.message.as_deref() {
         snapshot.insert_message(message);
     }
-    snapshot.insert_parent(&repo, &branches, &protected_branches);
     stack.push(snapshot)?;
 
     Ok(())

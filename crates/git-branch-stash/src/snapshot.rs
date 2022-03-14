@@ -75,25 +75,6 @@ impl Snapshot {
             serde_json::Value::String(message.to_owned()),
         );
     }
-
-    /// Add branch-relationship metadata
-    pub fn insert_parent(
-        &mut self,
-        repo: &crate::git::GitRepo,
-        branches: &crate::git::Branches,
-        protected_branches: &crate::git::Branches,
-    ) {
-        for branch in self.branches.iter_mut() {
-            if let Some(parent) = crate::git::find_base(repo, branches, branch.id)
-                .or_else(|| crate::git::find_protected_base(repo, protected_branches, branch.id))
-            {
-                branch.metadata.insert(
-                    "parent".to_owned(),
-                    serde_json::Value::String(parent.name.clone()),
-                );
-            }
-        }
-    }
 }
 
 /// State of an individual branch
