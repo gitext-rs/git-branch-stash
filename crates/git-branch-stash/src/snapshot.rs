@@ -24,7 +24,7 @@ impl Snapshot {
     }
 
     /// Extract branch state from an existing repo
-    pub fn from_repo(repo: &dyn crate::git::Repo) -> Result<Self, git2::Error> {
+    pub fn from_repo(repo: &crate::git::GitRepo) -> Result<Self, git2::Error> {
         let mut branches: Vec<_> = repo
             .local_branches()
             .map(|b| {
@@ -46,25 +46,48 @@ impl Snapshot {
     }
 
     /// Update repo to match the branch state
-    pub fn apply(&self, repo: &mut dyn crate::git::Repo) -> Result<(), git2::Error> {
+    pub fn apply(&self, repo: &mut crate::git::GitRepo) -> Result<(), git2::Error> {
         let head_branch = repo.head_branch();
         let head_branch_name = head_branch.as_ref().map(|b| b.name.as_str());
+
+        let mut planned_changes = Vec::new();
         for branch in self.branches.iter() {
             let existing = repo.find_local_branch(&branch.name);
-            if existing.map(|b| b.id) == Some(branch.id) {
+            if existing.as_ref().map(|b| b.id) == Some(branch.id) {
                 log::trace!("No change for {}", branch.name);
             } else {
-                if head_branch_name == Some(branch.name.as_str()) {
-                    log::debug!("Restoring {} (HEAD)", branch.name);
-                    repo.detach()?;
-                    repo.branch(&branch.name, branch.id)?;
-                    repo.switch(&branch.name)?;
-                } else {
-                    log::debug!("Restoring {}", branch.name);
-                    repo.branch(&branch.name, branch.id)?;
-                }
+                let existing_id = existing.map(|b| b.id).unwrap_or_else(git2::Oid::zero);
+                let new_id = branch.id;
+                planned_changes.push((existing_id, new_id, branch.name.as_str()));
             }
         }
+
+        let transaction_repo = git2::Repository::open(repo.raw().path())?;
+        let hooks = git2_ext::hooks::Hooks::with_repo(&transaction_repo)?;
+        let transaction = hooks
+            .run_reference_transaction(&transaction_repo, &planned_changes)
+            .map_err(|err| {
+                git2::Error::new(
+                    git2::ErrorCode::GenericError,
+                    git2::ErrorClass::Callback,
+                    err.to_string(),
+                )
+            })?;
+
+        for (_old_id, new_id, name) in &planned_changes {
+            if head_branch_name == Some(name) {
+                log::debug!("Restoring {} (HEAD)", name);
+                repo.detach()?;
+                repo.branch(name, *new_id)?;
+                repo.switch(name)?;
+            } else {
+                log::debug!("Restoring {}", name);
+                repo.branch(name, *new_id)?;
+            }
+        }
+
+        transaction.committed();
+
         Ok(())
     }
 
@@ -74,25 +97,6 @@ impl Snapshot {
             "message".to_owned(),
             serde_json::Value::String(message.to_owned()),
         );
-    }
-
-    /// Add branch-relationship metadata
-    pub fn insert_parent(
-        &mut self,
-        repo: &dyn crate::git::Repo,
-        branches: &crate::git::Branches,
-        protected_branches: &crate::git::Branches,
-    ) {
-        for branch in self.branches.iter_mut() {
-            if let Some(parent) = crate::git::find_base(repo, branches, branch.id)
-                .or_else(|| crate::git::find_protected_base(repo, protected_branches, branch.id))
-            {
-                branch.metadata.insert(
-                    "parent".to_owned(),
-                    serde_json::Value::String(parent.name.clone()),
-                );
-            }
-        }
     }
 }
 

@@ -52,3 +52,4 @@ concolor-clap = { version = "0.0.9", features = ["api_unstable"] }
 git-branch-stash = { version = "0.7.0", path = "crates/git-branch-stash" }
 git2 = { version = "0.14", default-features = false, features = ["vendored-libgit2"] }
 serde_json = "1"
+itertools = "0.10"

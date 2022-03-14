@@ -3,6 +3,7 @@
 use std::io::Write;
 
 use clap::Parser;
+use itertools::Itertools;
 use proc_exit::WithCodeResultExt;
 
 mod args;
@@ -50,21 +51,15 @@ fn run() -> proc_exit::ExitResult {
 fn push(args: args::PushArgs) -> proc_exit::ExitResult {
     let cwd = std::env::current_dir().with_code(proc_exit::Code::USAGE_ERR)?;
     let repo = git2::Repository::discover(&cwd).with_code(proc_exit::Code::USAGE_ERR)?;
-    let repo = git_branch_stash::git::GitRepo::new(repo);
+    let repo = git_branch_stash::GitRepo::new(repo);
     let mut stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
     let repo_config = git_branch_stash::config::RepoConfig::from_all(repo.raw())
         .with_code(proc_exit::Code::CONFIG_ERR)?;
-    let protected = git_branch_stash::git::ProtectedBranches::new(
-        repo_config.protected_branches().iter().map(|s| s.as_str()),
-    )
-    .with_code(proc_exit::Code::USAGE_ERR)?;
-    let branches = git_branch_stash::git::Branches::new(repo.local_branches());
-    let protected_branches = branches.protected(&protected);
 
     stack.capacity(repo_config.capacity());
 
-    if repo.is_dirty() {
+    if is_dirty(&repo) {
         log::warn!("Working tree is dirty, only capturing committed changes");
     }
 
@@ -73,7 +68,6 @@ fn push(args: args::PushArgs) -> proc_exit::ExitResult {
     if let Some(message) = args.message.as_deref() {
         snapshot.insert_message(message);
     }
-    snapshot.insert_parent(&repo, &branches, &protected_branches);
     stack.push(snapshot)?;
 
     Ok(())
@@ -88,7 +82,7 @@ fn list(args: args::ListArgs, colored: bool) -> proc_exit::ExitResult {
 
     let cwd = std::env::current_dir().with_code(proc_exit::Code::USAGE_ERR)?;
     let repo = git2::Repository::discover(&cwd).with_code(proc_exit::Code::USAGE_ERR)?;
-    let repo = git_branch_stash::git::GitRepo::new(repo);
+    let repo = git_branch_stash::GitRepo::new(repo);
     let stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
     let snapshots: Vec<_> = stack.iter().collect();
@@ -184,7 +178,7 @@ impl Palette {
 fn clear(args: args::ClearArgs) -> proc_exit::ExitResult {
     let cwd = std::env::current_dir().with_code(proc_exit::Code::USAGE_ERR)?;
     let repo = git2::Repository::discover(&cwd).with_code(proc_exit::Code::USAGE_ERR)?;
-    let repo = git_branch_stash::git::GitRepo::new(repo);
+    let repo = git_branch_stash::GitRepo::new(repo);
     let mut stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
     stack.clear();
@@ -195,7 +189,7 @@ fn clear(args: args::ClearArgs) -> proc_exit::ExitResult {
 fn drop(args: args::DropArgs) -> proc_exit::ExitResult {
     let cwd = std::env::current_dir().with_code(proc_exit::Code::USAGE_ERR)?;
     let repo = git2::Repository::discover(&cwd).with_code(proc_exit::Code::USAGE_ERR)?;
-    let repo = git_branch_stash::git::GitRepo::new(repo);
+    let repo = git_branch_stash::GitRepo::new(repo);
     let mut stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
     stack.pop();
@@ -206,7 +200,7 @@ fn drop(args: args::DropArgs) -> proc_exit::ExitResult {
 fn apply(args: args::ApplyArgs, pop: bool) -> proc_exit::ExitResult {
     let cwd = std::env::current_dir().with_code(proc_exit::Code::USAGE_ERR)?;
     let repo = git2::Repository::discover(&cwd).with_code(proc_exit::Code::USAGE_ERR)?;
-    let mut repo = git_branch_stash::git::GitRepo::new(repo);
+    let mut repo = git_branch_stash::GitRepo::new(repo);
     let mut stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
     match stack.peek() {
@@ -214,9 +208,9 @@ fn apply(args: args::ApplyArgs, pop: bool) -> proc_exit::ExitResult {
             let snapshot =
                 git_branch_stash::Snapshot::load(&last).with_code(proc_exit::Code::FAILURE)?;
 
-            let stash_id = git_branch_stash::git::stash_push(&mut repo, "branch-stash");
-            if repo.is_dirty() {
-                git_branch_stash::git::stash_pop(&mut repo, stash_id);
+            let stash_id = stash_push(&mut repo, "branch-stash");
+            if is_dirty(&repo) {
+                stash_pop(&mut repo, stash_id);
                 return Err(
                     proc_exit::Code::USAGE_ERR.with_message("Working tree is dirty, aborting")
                 );
@@ -226,7 +220,7 @@ fn apply(args: args::ApplyArgs, pop: bool) -> proc_exit::ExitResult {
                 .apply(&mut repo)
                 .with_code(proc_exit::Code::FAILURE)?;
 
-            git_branch_stash::git::stash_pop(&mut repo, stash_id);
+            stash_pop(&mut repo, stash_id);
             if pop {
                 let _ = std::fs::remove_file(&last);
             }
@@ -242,11 +236,98 @@ fn apply(args: args::ApplyArgs, pop: bool) -> proc_exit::ExitResult {
 fn stacks(_args: args::StacksArgs) -> proc_exit::ExitResult {
     let cwd = std::env::current_dir().with_code(proc_exit::Code::USAGE_ERR)?;
     let repo = git2::Repository::discover(&cwd).with_code(proc_exit::Code::USAGE_ERR)?;
-    let repo = git_branch_stash::git::GitRepo::new(repo);
+    let repo = git_branch_stash::GitRepo::new(repo);
 
     for stack in git_branch_stash::Stack::all(&repo) {
         writeln!(std::io::stdout(), "{}", stack.name)?;
     }
 
     Ok(())
+}
+
+fn is_dirty(repo: &git_branch_stash::GitRepo) -> bool {
+    if repo.raw().state() != git2::RepositoryState::Clean {
+        log::trace!("Repository status is unclean: {:?}", repo.raw().state());
+        return true;
+    }
+
+    let status = repo
+        .raw()
+        .statuses(Some(git2::StatusOptions::new().include_ignored(false)))
+        .unwrap();
+    if status.is_empty() {
+        false
+    } else {
+        log::trace!(
+            "Repository is dirty: {}",
+            status
+                .iter()
+                .flat_map(|s| s.path().map(|s| s.to_owned()))
+                .join(", ")
+        );
+        true
+    }
+}
+
+fn stash_push(repo: &mut git_branch_stash::GitRepo, context: &str) -> Option<git2::Oid> {
+    let branch = repo
+        .raw()
+        .head()
+        .and_then(|r| r.resolve())
+        .ok()
+        .and_then(|r| r.shorthand().map(|s| s.to_owned()));
+
+    let stash_msg = format!(
+        "WIP on {} ({})",
+        branch.as_deref().unwrap_or("HEAD"),
+        context
+    );
+    let signature = repo.raw().signature();
+    let stash_id = signature.and_then(|signature| {
+        repo.raw_mut()
+            .stash_save2(&signature, Some(&stash_msg), None)
+    });
+
+    match stash_id {
+        Ok(stash_id) => {
+            log::info!(
+                "Saved working directory and index state {}: {}",
+                stash_msg,
+                stash_id
+            );
+            Some(stash_id)
+        }
+        Err(err) => {
+            log::debug!("Failed to stash: {}", err);
+            None
+        }
+    }
+}
+
+fn stash_pop(repo: &mut git_branch_stash::GitRepo, stash_id: Option<git2::Oid>) {
+    if let Some(stash_id) = stash_id {
+        let mut index = None;
+        let _ = repo.raw_mut().stash_foreach(|i, _, id| {
+            if *id == stash_id {
+                index = Some(i);
+                false
+            } else {
+                true
+            }
+        });
+        let index = if let Some(index) = index {
+            index
+        } else {
+            return;
+        };
+
+        match repo.raw_mut().stash_pop(index, None) {
+            Ok(()) => {
+                log::info!("Dropped refs/stash {}", stash_id);
+            }
+            Err(err) => {
+                log::error!("Failed to pop {} from stash: {}", stash_id, err);
+            }
+        }
+    }
 }

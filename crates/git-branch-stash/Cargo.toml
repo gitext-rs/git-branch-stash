@@ -20,6 +20,7 @@ include = [
 [dependencies]
 git2 = { version = "0.14", default-features = false }
 git-config-env = "0.1"
+git2-ext = "0.0.5"
 log = "0.4"
 eyre = "0.6"
 itertools = "0.10"
