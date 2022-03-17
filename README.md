@@ -31,7 +31,7 @@ Backup and restore what your branches, including what they point at.
 
 Or use rust to install:
 ```bash
-cargo install git-branch-stash
+cargo install git-branch-stash-cli
 ```
 
 ### Uninstall
