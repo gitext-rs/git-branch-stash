@@ -3,6 +3,7 @@
 #[clap(
         setting = clap::AppSettings::DeriveDisplayOrder,
         dont_collapse_args_in_usage = true,
+        args_conflicts_with_subcommands = true,
         color = concolor_clap::color_choice(),
     )]
 pub struct Args {
