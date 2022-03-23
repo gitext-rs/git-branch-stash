@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [0.9.1] - 2022-03-23
+
 ## [0.9.0] - 2022-03-23
 
 ### Breaking Changes
@@ -314,7 +316,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `full` -> `commits`
 
 <!-- next-url -->
-[Unreleased]: https://github.com/gitext-rs/git-branch-stash/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/gitext-rs/git-branch-stash/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/gitext-rs/git-branch-stash/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/gitext-rs/git-branch-stash/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/gitext-rs/git-branch-stash/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/gitext-rs/git-branch-stash/compare/v0.6.0...v0.7.0
