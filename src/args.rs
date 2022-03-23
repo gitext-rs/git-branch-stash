@@ -1,4 +1,4 @@
-#[derive(clap::Parser)]
+#[derive(Debug, clap::Parser)]
 #[clap(name = "git-branch-stash", about, author, version)]
 #[clap(
         setting = clap::AppSettings::DeriveDisplayOrder,
@@ -19,7 +19,7 @@ pub struct Args {
     pub verbose: clap_verbosity_flag::Verbosity<clap_verbosity_flag::InfoLevel>,
 }
 
-#[derive(clap::Subcommand)]
+#[derive(Debug, clap::Subcommand)]
 pub enum Subcommand {
     /// Stash all branches
     Push(PushArgs),
@@ -37,7 +37,7 @@ pub enum Subcommand {
     Stacks(StacksArgs),
 }
 
-#[derive(clap::Args)]
+#[derive(Debug, clap::Args)]
 pub struct PushArgs {
     /// Specify which stash stack to use
     #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
@@ -48,35 +48,35 @@ pub struct PushArgs {
     pub message: Option<String>,
 }
 
-#[derive(clap::Args)]
+#[derive(Debug, clap::Args)]
 pub struct ListArgs {
     /// Specify which stash stack to use
     #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 }
 
-#[derive(clap::Args)]
+#[derive(Debug, clap::Args)]
 pub struct ClearArgs {
     /// Specify which stash stack to use
     #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 }
 
-#[derive(clap::Args)]
+#[derive(Debug, clap::Args)]
 pub struct DropArgs {
     /// Specify which stash stack to use
     #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 }
 
-#[derive(clap::Args)]
+#[derive(Debug, clap::Args)]
 pub struct ApplyArgs {
     /// Specify which stash stack to use
     #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 }
 
-#[derive(clap::Args)]
+#[derive(Debug, clap::Args)]
 pub struct StacksArgs {}
 
 #[cfg(test)]
