@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Breaking Changes
+
+- Default subcommand now conflicts with subcommands
+
+### Fixes
+
+- `--color` is now global
+
 ## [0.8.0] - 2022-03-14
 
 ### Breaking Changes
