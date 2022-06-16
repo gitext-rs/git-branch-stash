@@ -104,10 +104,10 @@ impl Stack {
             let len = elems.len();
             if capacity < len {
                 let remove = len - capacity;
-                log::warn!("Too many snapshots, clearing {} oldest", remove);
+                log::debug!("Too many snapshots, clearing {} oldest", remove);
                 for snapshot_path in &elems[0..remove] {
                     if let Err(err) = std::fs::remove_file(&snapshot_path) {
-                        log::trace!("Failed to remove {}: {}", snapshot_path.display(), err);
+                        log::debug!("Failed to remove {}: {}", snapshot_path.display(), err);
                     } else {
                         log::trace!("Removed {}", snapshot_path.display());
                     }
