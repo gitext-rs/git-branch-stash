@@ -304,9 +304,9 @@ dependencies = [
 
 [[package]]
 name = "git2-ext"
-version = "0.0.5"
+version = "0.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d31ed46308950b167d18a47ff5ddee812b0d2ac62acfdee55f0cec717f751625"
+checksum = "f80becd0af636e7c5bfec1434482858eb4f2fe70394d18a7773287cc44e8fee3"
 dependencies = [
  "git2",
  "itertools",
