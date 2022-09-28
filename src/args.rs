@@ -1,22 +1,20 @@
 #[derive(Debug, clap::Parser)]
-#[clap(name = "git-branch-stash", about, author, version)]
-#[clap(
-        setting = clap::AppSettings::DeriveDisplayOrder,
-        dont_collapse_args_in_usage = true,
+#[command(name = "git-branch-stash", about, author, version)]
+#[command(
         args_conflicts_with_subcommands = true,
         color = concolor_clap::color_choice(),
     )]
 pub struct Args {
-    #[clap(subcommand)]
+    #[command(subcommand)]
     pub subcommand: Option<Subcommand>,
 
-    #[clap(flatten)]
+    #[command(flatten)]
     pub push: PushArgs,
 
-    #[clap(flatten)]
+    #[command(flatten)]
     pub(crate) color: concolor_clap::Color,
 
-    #[clap(flatten)]
+    #[command(flatten)]
     pub verbose: clap_verbosity_flag::Verbosity<clap_verbosity_flag::InfoLevel>,
 }
 
@@ -41,39 +39,39 @@ pub enum Subcommand {
 #[derive(Debug, clap::Args)]
 pub struct PushArgs {
     /// Specify which stash stack to use
-    #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
+    #[arg(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 
     /// Annotate the snapshot with the given message
-    #[clap(short, long)]
+    #[arg(short, long)]
     pub message: Option<String>,
 }
 
 #[derive(Debug, clap::Args)]
 pub struct ListArgs {
     /// Specify which stash stack to use
-    #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
+    #[arg(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 }
 
 #[derive(Debug, clap::Args)]
 pub struct ClearArgs {
     /// Specify which stash stack to use
-    #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
+    #[arg(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 }
 
 #[derive(Debug, clap::Args)]
 pub struct DropArgs {
     /// Specify which stash stack to use
-    #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
+    #[arg(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 }
 
 #[derive(Debug, clap::Args)]
 pub struct ApplyArgs {
     /// Specify which stash stack to use
-    #[clap(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
+    #[arg(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
     pub stack: String,
 }
 
