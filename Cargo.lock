@@ -244,7 +244,7 @@ checksum = "0e4075386626662786ddb0ec9081e7c7eeb1ba31951f447ca780ef9f5d568189"
 
 [[package]]
 name = "git-branch-stash"
-version = "0.8.2"
+version = "0.9.0"
 dependencies = [
  "bstr",
  "eyre",
@@ -260,7 +260,7 @@ dependencies = [
 
 [[package]]
 name = "git-branch-stash-cli"
-version = "0.9.4"
+version = "0.10.0"
 dependencies = [
  "clap",
  "clap-verbosity-flag",
