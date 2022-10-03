@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Breaking Change
+
+- Upgraded `git2`
+
 ## [0.9.4] - 2022-09-28
 
 ## [0.9.3] - 2022-06-16
