@@ -47,7 +47,7 @@ proc-exit = "1"
 eyre = "0.6"
 human-panic = "1"
 yansi = "0.5.1"
-concolor = "0.0.8"
+concolor = "0.0.9"
 concolor-clap = { version = "0.0.11", features = ["api_unstable"] }
 
 git-branch-stash = { version = "0.9.0", path = "crates/git-branch-stash" }
