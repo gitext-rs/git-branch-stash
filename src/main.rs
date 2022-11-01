@@ -4,7 +4,7 @@ use std::io::Write;
 
 use clap::Parser;
 use itertools::Itertools;
-use proc_exit::WithCodeResultExt;
+use proc_exit::prelude::*;
 
 mod args;
 mod logger;
@@ -17,17 +17,7 @@ fn main() {
 
 fn run() -> proc_exit::ExitResult {
     // clap's `get_matches` uses Failure rather than Usage, so bypass it for `get_matches_safe`.
-    let args = match args::Args::try_parse() {
-        Ok(args) => args,
-        Err(e) if e.use_stderr() => {
-            let _ = e.print();
-            return proc_exit::Code::USAGE_ERR.ok();
-        }
-        Err(e) => {
-            let _ = e.print();
-            return proc_exit::Code::SUCCESS.ok();
-        }
-    };
+    let args = args::Args::parse();
 
     args.color.apply();
     let colored_stdout = concolor::get(concolor::Stream::Stdout).ansi_color();
@@ -49,13 +39,13 @@ fn run() -> proc_exit::ExitResult {
 }
 
 fn push(args: args::PushArgs) -> proc_exit::ExitResult {
-    let cwd = std::env::current_dir().with_code(proc_exit::Code::USAGE_ERR)?;
-    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::Code::USAGE_ERR)?;
+    let cwd = std::env::current_dir().with_code(proc_exit::bash::USAGE)?;
+    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::bash::USAGE)?;
     let repo = git_branch_stash::GitRepo::new(repo);
     let mut stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
     let repo_config = git_branch_stash::config::RepoConfig::from_all(repo.raw())
-        .with_code(proc_exit::Code::CONFIG_ERR)?;
+        .with_code(proc_exit::Code::FAILURE)?;
 
     stack.capacity(repo_config.capacity());
 
@@ -68,7 +58,7 @@ fn push(args: args::PushArgs) -> proc_exit::ExitResult {
     if let Some(message) = args.message.as_deref() {
         snapshot.insert_message(message);
     }
-    stack.push(snapshot)?;
+    stack.push(snapshot).with_code(proc_exit::Code::FAILURE)?;
 
     Ok(())
 }
@@ -80,8 +70,8 @@ fn list(args: args::ListArgs, colored: bool) -> proc_exit::ExitResult {
         Palette::plain()
     };
 
-    let cwd = std::env::current_dir().with_code(proc_exit::Code::USAGE_ERR)?;
-    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::Code::USAGE_ERR)?;
+    let cwd = std::env::current_dir().with_code(proc_exit::bash::USAGE)?;
+    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::bash::USAGE)?;
     let repo = git_branch_stash::GitRepo::new(repo);
     let stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
@@ -109,14 +99,16 @@ fn list(args: args::ListArgs, colored: bool) -> proc_exit::ExitResult {
                     std::io::stdout(),
                     "{}",
                     style.paint(format_args!("Message: {}", message))
-                )?;
+                )
+                .with_code(proc_exit::Code::FAILURE)?;
             }
             None => {
                 writeln!(
                     std::io::stdout(),
                     "{}",
                     style.paint(format_args!("Path: {}", snapshot_path.display()))
-                )?;
+                )
+                .with_code(proc_exit::Code::FAILURE)?;
             }
         }
         for branch in snapshot.branches.iter() {
@@ -135,9 +127,10 @@ fn list(args: args::ListArgs, colored: bool) -> proc_exit::ExitResult {
                 std::io::stdout(),
                 "{}",
                 style.paint(format_args!("- {}: {}", name, summary))
-            )?;
+            )
+            .with_code(proc_exit::Code::FAILURE)?;
         }
-        writeln!(std::io::stdout())?;
+        writeln!(std::io::stdout()).with_code(proc_exit::Code::FAILURE)?;
     }
 
     Ok(())
@@ -176,8 +169,8 @@ impl Palette {
 }
 
 fn clear(args: args::ClearArgs) -> proc_exit::ExitResult {
-    let cwd = std::env::current_dir().with_code(proc_exit::Code::USAGE_ERR)?;
-    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::Code::USAGE_ERR)?;
+    let cwd = std::env::current_dir().with_code(proc_exit::bash::USAGE)?;
+    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::bash::USAGE)?;
     let repo = git_branch_stash::GitRepo::new(repo);
     let mut stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
@@ -187,8 +180,8 @@ fn clear(args: args::ClearArgs) -> proc_exit::ExitResult {
 }
 
 fn drop(args: args::DropArgs) -> proc_exit::ExitResult {
-    let cwd = std::env::current_dir().with_code(proc_exit::Code::USAGE_ERR)?;
-    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::Code::USAGE_ERR)?;
+    let cwd = std::env::current_dir().with_code(proc_exit::bash::USAGE)?;
+    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::bash::USAGE)?;
     let repo = git_branch_stash::GitRepo::new(repo);
     let mut stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
@@ -198,8 +191,8 @@ fn drop(args: args::DropArgs) -> proc_exit::ExitResult {
 }
 
 fn apply(args: args::ApplyArgs, pop: bool) -> proc_exit::ExitResult {
-    let cwd = std::env::current_dir().with_code(proc_exit::Code::USAGE_ERR)?;
-    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::Code::USAGE_ERR)?;
+    let cwd = std::env::current_dir().with_code(proc_exit::bash::USAGE)?;
+    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::bash::USAGE)?;
     let mut repo = git_branch_stash::GitRepo::new(repo);
     let mut stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
@@ -211,9 +204,7 @@ fn apply(args: args::ApplyArgs, pop: bool) -> proc_exit::ExitResult {
             let stash_id = stash_push(&mut repo, "branch-stash");
             if is_dirty(&repo) {
                 stash_pop(&mut repo, stash_id);
-                return Err(
-                    proc_exit::Code::USAGE_ERR.with_message("Working tree is dirty, aborting")
-                );
+                return Err(proc_exit::bash::USAGE.with_message("Working tree is dirty, aborting"));
             }
 
             snapshot
@@ -234,12 +225,12 @@ fn apply(args: args::ApplyArgs, pop: bool) -> proc_exit::ExitResult {
 }
 
 fn stacks(_args: args::StacksArgs) -> proc_exit::ExitResult {
-    let cwd = std::env::current_dir().with_code(proc_exit::Code::USAGE_ERR)?;
-    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::Code::USAGE_ERR)?;
+    let cwd = std::env::current_dir().with_code(proc_exit::bash::USAGE)?;
+    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::bash::USAGE)?;
     let repo = git_branch_stash::GitRepo::new(repo);
 
     for stack in git_branch_stash::Stack::all(&repo) {
-        writeln!(std::io::stdout(), "{}", stack.name)?;
+        writeln!(std::io::stdout(), "{}", stack.name).with_code(proc_exit::Code::FAILURE)?;
     }
 
     Ok(())
