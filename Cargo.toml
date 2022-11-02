@@ -2,19 +2,13 @@
 members = [
     "crates/*",
 ]
+resolver = "2"
 
-[package]
-name = "git-branch-stash-cli"
-description = "Manage snapshots of your working directory"
-version = "0.10.0"
+[workspace.package]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/gitext-rs/git-branch-stash.git"
-documentation = "https://github.com/gitext-rs/git-branch-stash.git"
-readme = "README.md"
-categories = ["command-line-interface", "development-tools"]
-keywords = ["git", "cli"]
 edition = "2021"
-rust-version = "1.60.0"  # MSRV
+rust-version = "1.64.0"  # MSRV
 include = [
   "src/**/*",
   "Cargo.toml",
@@ -23,6 +17,20 @@ include = [
   "README.md",
   "examples/**/*"
 ]
+
+[package]
+name = "git-branch-stash-cli"
+description = "Manage snapshots of your working directory"
+version = "0.10.0"
+documentation = "https://github.com/gitext-rs/git-branch-stash.git"
+readme = "README.md"
+categories = ["command-line-interface", "development-tools"]
+keywords = ["git", "cli"]
+license.workspace = true
+repository.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+include.workspace = true
 
 [package.metadata.release]
 pre-release-replacements = [
@@ -39,16 +47,16 @@ path = "src/main.rs"
 doc = false
 
 [dependencies]
-clap = { version = "4.0.8", features = ["derive"] }
+clap = { version = "4.0.18", features = ["derive"] }
 clap-verbosity-flag = "2.0"
 env_logger = { version = "0.9", default-features = false, features = ["termcolor"] }
 log = "0.4"
-proc-exit = "1"
+proc-exit = "2"
 eyre = "0.6"
 human-panic = "1"
 yansi = "0.5.1"
-concolor = "0.0.8"
-concolor-clap = { version = "0.0.11", features = ["api_unstable"] }
+concolor = "0.0.9"
+concolor-clap = { version = "0.0.12", features = ["api_unstable"] }
 
 git-branch-stash = { version = "0.9.0", path = "crates/git-branch-stash" }
 git2 = { version = "0.15", default-features = false, features = ["vendored-libgit2"] }
