@@ -209,7 +209,7 @@ impl RepoConfig {
 
     pub fn capacity(&self) -> Option<usize> {
         let capacity = self.capacity.unwrap_or(DEFAULT_CAPACITY);
-        (capacity != 0).then(|| capacity)
+        (capacity != 0).then_some(capacity)
     }
 }
 

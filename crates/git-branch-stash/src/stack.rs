@@ -31,7 +31,7 @@ impl Stack {
             .flatten()
             .filter_map(|e| {
                 let e = e.ok()?;
-                let e = e.file_type().ok()?.is_dir().then(|| e)?;
+                let e = e.file_type().ok()?.is_dir().then_some(e)?;
                 let p = e.path();
                 let stack_name = p.file_name()?.to_str()?.to_owned();
                 let stack_root = stack_root(repo.raw().path(), &stack_name);
@@ -60,9 +60,9 @@ impl Stack {
             .flatten()
             .filter_map(|e| {
                 let e = e.ok()?;
-                let e = e.file_type().ok()?.is_file().then(|| e)?;
+                let e = e.file_type().ok()?.is_file().then_some(e)?;
                 let p = e.path();
-                let p = (p.extension()? == Self::EXT).then(|| p)?;
+                let p = (p.extension()? == Self::EXT).then_some(p)?;
                 let index = p.file_stem()?.to_str()?.parse::<usize>().ok()?;
                 Some((index, p))
             })
