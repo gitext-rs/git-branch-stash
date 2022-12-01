@@ -49,7 +49,7 @@ doc = false
 [dependencies]
 clap = { version = "4.0.18", features = ["derive"] }
 clap-verbosity-flag = "2.0"
-env_logger = { version = "0.9", default-features = false, features = ["termcolor"] }
+env_logger = { version = "0.10", default-features = false, features = ["termcolor"] }
 log = "0.4"
 proc-exit = "2"
 eyre = "0.6"
