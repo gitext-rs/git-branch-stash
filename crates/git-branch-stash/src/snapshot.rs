@@ -19,7 +19,7 @@ impl Snapshot {
     /// Save branch state to a file
     pub fn save(&self, path: &std::path::Path) -> Result<(), std::io::Error> {
         let s = serde_json::to_string_pretty(self)?;
-        std::fs::write(path, &s)?;
+        std::fs::write(path, s)?;
         Ok(())
     }
 
