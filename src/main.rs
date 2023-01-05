@@ -40,7 +40,7 @@ fn run() -> proc_exit::ExitResult {
 
 fn push(args: args::PushArgs) -> proc_exit::ExitResult {
     let cwd = std::env::current_dir().with_code(proc_exit::bash::USAGE)?;
-    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::bash::USAGE)?;
+    let repo = git2::Repository::discover(cwd).with_code(proc_exit::bash::USAGE)?;
     let repo = git_branch_stash::GitRepo::new(repo);
     let mut stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
@@ -71,7 +71,7 @@ fn list(args: args::ListArgs, colored: bool) -> proc_exit::ExitResult {
     };
 
     let cwd = std::env::current_dir().with_code(proc_exit::bash::USAGE)?;
-    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::bash::USAGE)?;
+    let repo = git2::Repository::discover(cwd).with_code(proc_exit::bash::USAGE)?;
     let repo = git_branch_stash::GitRepo::new(repo);
     let stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
@@ -170,7 +170,7 @@ impl Palette {
 
 fn clear(args: args::ClearArgs) -> proc_exit::ExitResult {
     let cwd = std::env::current_dir().with_code(proc_exit::bash::USAGE)?;
-    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::bash::USAGE)?;
+    let repo = git2::Repository::discover(cwd).with_code(proc_exit::bash::USAGE)?;
     let repo = git_branch_stash::GitRepo::new(repo);
     let mut stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
@@ -181,7 +181,7 @@ fn clear(args: args::ClearArgs) -> proc_exit::ExitResult {
 
 fn drop(args: args::DropArgs) -> proc_exit::ExitResult {
     let cwd = std::env::current_dir().with_code(proc_exit::bash::USAGE)?;
-    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::bash::USAGE)?;
+    let repo = git2::Repository::discover(cwd).with_code(proc_exit::bash::USAGE)?;
     let repo = git_branch_stash::GitRepo::new(repo);
     let mut stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
@@ -192,7 +192,7 @@ fn drop(args: args::DropArgs) -> proc_exit::ExitResult {
 
 fn apply(args: args::ApplyArgs, pop: bool) -> proc_exit::ExitResult {
     let cwd = std::env::current_dir().with_code(proc_exit::bash::USAGE)?;
-    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::bash::USAGE)?;
+    let repo = git2::Repository::discover(cwd).with_code(proc_exit::bash::USAGE)?;
     let mut repo = git_branch_stash::GitRepo::new(repo);
     let mut stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
@@ -226,7 +226,7 @@ fn apply(args: args::ApplyArgs, pop: bool) -> proc_exit::ExitResult {
 
 fn stacks(_args: args::StacksArgs) -> proc_exit::ExitResult {
     let cwd = std::env::current_dir().with_code(proc_exit::bash::USAGE)?;
-    let repo = git2::Repository::discover(&cwd).with_code(proc_exit::bash::USAGE)?;
+    let repo = git2::Repository::discover(cwd).with_code(proc_exit::bash::USAGE)?;
     let repo = git_branch_stash::GitRepo::new(repo);
 
     for stack in git_branch_stash::Stack::all(&repo) {
