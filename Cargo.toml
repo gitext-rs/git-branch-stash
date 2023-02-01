@@ -21,7 +21,7 @@ include = [
 [package]
 name = "git-branch-stash-cli"
 description = "Manage snapshots of your working directory"
-version = "0.10.1"
+version = "0.10.2"
 documentation = "https://github.com/gitext-rs/git-branch-stash.git"
 readme = "README.md"
 categories = ["command-line-interface", "development-tools"]
@@ -58,7 +58,7 @@ yansi = "0.5.1"
 concolor = "0.0.11"
 concolor-clap = { version = "0.0.13", features = ["api_unstable"] }
 
-git-branch-stash = { version = "0.9.1", path = "crates/git-branch-stash" }
+git-branch-stash = { version = "0.9.2", path = "crates/git-branch-stash" }
 git2 = { version = "0.16", default-features = false, features = ["vendored-libgit2"] }
 serde_json = "1"
 itertools = "0.10"
