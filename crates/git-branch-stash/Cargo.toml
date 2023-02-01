@@ -12,9 +12,9 @@ rust-version.workspace = true
 include.workspace = true
 
 [dependencies]
-git2 = { version = "0.15", default-features = false }
+git2 = { version = "0.16", default-features = false }
 git-config-env = "0.1"
-git2-ext = "0.3.0"
+git2-ext = "0.5.0"
 log = "0.4"
 eyre = "0.6"
 itertools = "0.10"
