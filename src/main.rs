@@ -2,12 +2,15 @@
 
 use std::io::Write;
 
+use anstyle_stream::stdout;
 use clap::Parser;
 use itertools::Itertools;
 use proc_exit::prelude::*;
 
 mod args;
 mod logger;
+
+use logger::Styled;
 
 fn main() {
     human_panic::setup_panic!();
@@ -20,7 +23,6 @@ fn run() -> proc_exit::ExitResult {
     let args = args::Args::parse();
 
     args.color.apply();
-    let colored_stdout = concolor::get(concolor::Stream::Stdout).ansi_color();
     let colored_stderr = concolor::get(concolor::Stream::Stderr).ansi_color();
 
     logger::init_logging(args.verbose.clone(), colored_stderr);
@@ -29,7 +31,7 @@ fn run() -> proc_exit::ExitResult {
     let push_args = args.push;
     match subcommand.unwrap_or(args::Subcommand::Push(push_args)) {
         args::Subcommand::Push(sub_args) => push(sub_args),
-        args::Subcommand::List(sub_args) => list(sub_args, colored_stdout),
+        args::Subcommand::List(sub_args) => list(sub_args),
         args::Subcommand::Clear(sub_args) => clear(sub_args),
         args::Subcommand::Drop(sub_args) => drop(sub_args),
         args::Subcommand::Pop(sub_args) => apply(sub_args, true),
@@ -63,12 +65,8 @@ fn push(args: args::PushArgs) -> proc_exit::ExitResult {
     Ok(())
 }
 
-fn list(args: args::ListArgs, colored: bool) -> proc_exit::ExitResult {
-    let palette = if colored {
-        Palette::colored()
-    } else {
-        Palette::plain()
-    };
+fn list(args: args::ListArgs) -> proc_exit::ExitResult {
+    let palette = Palette::colored();
 
     let cwd = std::env::current_dir().with_code(proc_exit::bash::USAGE)?;
     let repo = git2::Repository::discover(cwd).with_code(proc_exit::bash::USAGE)?;
@@ -76,6 +74,7 @@ fn list(args: args::ListArgs, colored: bool) -> proc_exit::ExitResult {
     let stack = git_branch_stash::Stack::new(&args.stack, &repo);
 
     let snapshots: Vec<_> = stack.iter().collect();
+    let mut stdout = stdout().lock();
     for (i, snapshot_path) in snapshots.iter().enumerate() {
         let style = if i < snapshots.len() - 1 {
             palette.info
@@ -96,17 +95,17 @@ fn list(args: args::ListArgs, colored: bool) -> proc_exit::ExitResult {
         match snapshot.metadata.get("message") {
             Some(message) => {
                 writeln!(
-                    std::io::stdout(),
+                    stdout,
                     "{}",
-                    style.paint(format_args!("Message: {}", message))
+                    Styled::new(format_args!("Message: {}", message), style)
                 )
                 .with_code(proc_exit::Code::FAILURE)?;
             }
             None => {
                 writeln!(
-                    std::io::stdout(),
+                    stdout,
                     "{}",
-                    style.paint(format_args!("Path: {}", snapshot_path.display()))
+                    Styled::new(format_args!("Path: {}", snapshot_path.display()), style)
                 )
                 .with_code(proc_exit::Code::FAILURE)?;
             }
@@ -124,46 +123,36 @@ fn list(args: args::ListArgs, colored: bool) -> proc_exit::ExitResult {
                     branch.name.clone()
                 };
             writeln!(
-                std::io::stdout(),
+                stdout,
                 "{}",
-                style.paint(format_args!("- {}: {}", name, summary))
+                Styled::new(format_args!("- {}: {}", name, summary), style),
             )
             .with_code(proc_exit::Code::FAILURE)?;
         }
-        writeln!(std::io::stdout()).with_code(proc_exit::Code::FAILURE)?;
+        writeln!(stdout).with_code(proc_exit::Code::FAILURE)?;
     }
 
     Ok(())
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Default, Debug)]
 #[allow(dead_code)]
 struct Palette {
-    error: yansi::Style,
-    warn: yansi::Style,
-    info: yansi::Style,
-    good: yansi::Style,
-    hint: yansi::Style,
+    error: anstyle::Style,
+    warn: anstyle::Style,
+    info: anstyle::Style,
+    good: anstyle::Style,
+    hint: anstyle::Style,
 }
 
 impl Palette {
     pub fn colored() -> Self {
         Self {
-            error: yansi::Style::new(yansi::Color::Red),
-            warn: yansi::Style::new(yansi::Color::Yellow),
-            info: yansi::Style::new(yansi::Color::Blue),
-            good: yansi::Style::new(yansi::Color::Green),
-            hint: yansi::Style::new(yansi::Color::Blue).dimmed(),
-        }
-    }
-
-    pub fn plain() -> Self {
-        Self {
-            error: yansi::Style::default(),
-            warn: yansi::Style::default(),
-            info: yansi::Style::default(),
-            good: yansi::Style::default(),
-            hint: yansi::Style::default(),
+            error: anstyle::AnsiColor::Red.into(),
+            warn: anstyle::AnsiColor::Yellow.into(),
+            info: anstyle::AnsiColor::Blue.into(),
+            good: anstyle::AnsiColor::Green.into(),
+            hint: anstyle::AnsiColor::Blue | anstyle::Effects::DIMMED,
         }
     }
 }
@@ -229,8 +218,9 @@ fn stacks(_args: args::StacksArgs) -> proc_exit::ExitResult {
     let repo = git2::Repository::discover(cwd).with_code(proc_exit::bash::USAGE)?;
     let repo = git_branch_stash::GitRepo::new(repo);
 
+    let mut stdout = stdout().lock();
     for stack in git_branch_stash::Stack::all(&repo) {
-        writeln!(std::io::stdout(), "{}", stack.name).with_code(proc_exit::Code::FAILURE)?;
+        writeln!(stdout, "{}", stack.name).with_code(proc_exit::Code::FAILURE)?;
     }
 
     Ok(())
