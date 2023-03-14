@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [0.10.3] - 2023-03-14
+
 ### Fixes
 
 - *(cli)* Fix terminal detection
@@ -340,7 +342,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `full` -> `commits`
 
 <!-- next-url -->
-[Unreleased]: https://github.com/gitext-rs/git-branch-stash/compare/v0.10.2...HEAD
+[Unreleased]: https://github.com/gitext-rs/git-branch-stash/compare/v0.10.3...HEAD
+[0.10.3]: https://github.com/gitext-rs/git-branch-stash/compare/v0.10.2...v0.10.3
 [0.10.2]: https://github.com/gitext-rs/git-branch-stash/compare/v0.10.1...v0.10.2
 [0.10.1]: https://github.com/gitext-rs/git-branch-stash/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/gitext-rs/git-branch-stash/compare/v0.9.4...v0.10.0
