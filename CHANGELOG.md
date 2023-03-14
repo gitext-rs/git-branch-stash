@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+- *(cli)* Fix terminal detection
+
 ## [0.10.2] - 2023-02-01
 
 ## [0.10.1] - 2023-01-05
