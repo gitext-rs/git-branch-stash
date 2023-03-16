@@ -48,17 +48,18 @@ doc = false
 
 [dependencies]
 clap = { version = "4.1.8", features = ["derive"] }
-clap-verbosity-flag = "2.0"
-env_logger = { version = "0.10", default-features = false, features = ["auto-color"] }
-log = "0.4"
-proc-exit = "2"
-eyre = "0.6"
-human-panic = "1"
-yansi = "0.5.1"
-concolor = "0.0.12"
-concolor-clap = { version = "0.0.14", features = ["api_unstable"] }
+clap-verbosity-flag = "2.0.0"
+env_logger = { version = "0.10.0", default-features = false, features = ["auto-color"] }
+log = "0.4.17"
+proc-exit = "2.0.1"
+eyre = "0.6.8"
+human-panic = "1.1.2"
+concolor = "0.1.1"
+concolor-clap = { version = "0.1.0", features = ["api"] }
+anstyle-stream = "0.2.1"
+anstyle = "0.3.1"
 
 git-branch-stash = { version = "0.9.2", path = "crates/git-branch-stash" }
-git2 = { version = "0.16", default-features = false, features = ["vendored-libgit2"] }
-serde_json = "1"
-itertools = "0.10"
+git2 = { version = "0.16.1", default-features = false, features = ["vendored-libgit2"] }
+serde_json = "1.0.85"
+itertools = "0.10.5"
