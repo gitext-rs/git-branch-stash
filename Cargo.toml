@@ -53,10 +53,10 @@ env_logger = { version = "0.10.0", default-features = false, features = ["auto-c
 log = "0.4.17"
 proc-exit = "2.0.1"
 eyre = "0.6.8"
-human-panic = "1.1.2"
+human-panic = "1.1.3"
 concolor = "0.1.1"
 concolor-clap = { version = "0.1.0", features = ["api"] }
-anstyle-stream = "0.2.1"
+anstream = "0.2.1"
 anstyle = "0.3.1"
 
 git-branch-stash = { version = "0.9.3", path = "crates/git-branch-stash" }

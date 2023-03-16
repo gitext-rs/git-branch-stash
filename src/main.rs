@@ -2,7 +2,7 @@
 
 use std::io::Write;
 
-use anstyle_stream::stdout;
+use anstream::stdout;
 use clap::Parser;
 use itertools::Itertools;
 use proc_exit::prelude::*;
