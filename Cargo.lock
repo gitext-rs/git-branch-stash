@@ -285,7 +285,7 @@ checksum = "ad0a93d233ebf96623465aad4046a8d3aa4da22d4f4beba5388838c8a434bbb4"
 
 [[package]]
 name = "git-branch-stash"
-version = "0.9.3"
+version = "0.10.0"
 dependencies = [
  "bstr",
  "eyre",
@@ -301,7 +301,7 @@ dependencies = [
 
 [[package]]
 name = "git-branch-stash-cli"
-version = "0.10.4"
+version = "0.11.0"
 dependencies = [
  "anstream",
  "anstyle",
