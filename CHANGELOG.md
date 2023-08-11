@@ -347,7 +347,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Load config when in a worktree
 - Restore correct HEAD when multiple branches on the same commit
 
-### Breaking Chanages
+### Breaking Changes
 
 - Renamed `--format` options:
   - `brief` -> `branches`
