@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [0.11.1] - 2023-09-01
+
 ### Compatibility
 
 - Update MSRV to 1.70.0
@@ -362,7 +364,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `full` -> `commits`
 
 <!-- next-url -->
-[Unreleased]: https://github.com/gitext-rs/git-branch-stash/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/gitext-rs/git-branch-stash/compare/v0.11.1...HEAD
+[0.11.1]: https://github.com/gitext-rs/git-branch-stash/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/gitext-rs/git-branch-stash/compare/v0.10.4...v0.11.0
 [0.10.4]: https://github.com/gitext-rs/git-branch-stash/compare/v0.10.3...v0.10.4
 [0.10.3]: https://github.com/gitext-rs/git-branch-stash/compare/v0.10.2...v0.10.3
