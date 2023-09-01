@@ -13,7 +13,7 @@ include.workspace = true
 
 [dependencies]
 git2 = { version = "0.17", default-features = false }
-git-config-env = "0.1.5"
+git-config-env = "0.2.0"
 git2-ext = "0.6.0"
 log = "0.4.18"
 eyre = "0.6"

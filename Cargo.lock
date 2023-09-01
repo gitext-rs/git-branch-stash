@@ -347,7 +347,7 @@ dependencies = [
  "git-config-env",
  "git2",
  "git2-ext",
- "itertools",
+ "itertools 0.10.5",
  "log",
  "maplit",
  "serde",
@@ -369,7 +369,7 @@ dependencies = [
  "git-branch-stash",
  "git2",
  "human-panic",
- "itertools",
+ "itertools 0.10.5",
  "log",
  "proc-exit",
  "serde_json",
@@ -377,12 +377,12 @@ dependencies = [
 
 [[package]]
 name = "git-config-env"
-version = "0.1.5"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b3639d314abdaf0aee12030ea53e0eb15af6f17ee978a1f3a74738345b93dc16"
+checksum = "f71f213a516cb2ec333118dbc2240743d608fe6d4de7d8e66ac4d675b6fb7324"
 dependencies = [
- "itertools",
- "winnow 0.4.1",
+ "itertools 0.11.0",
+ "winnow 0.5.15",
 ]
 
 [[package]]
@@ -406,7 +406,7 @@ checksum = "a02e722c7e38969577e2f7a59b13fde0ee93e32b21d64bcbc3befedb9dd57a8b"
 dependencies = [
  "bstr",
  "git2",
- "itertools",
+ "itertools 0.10.5",
  "log",
  "shlex",
  "tempfile",
@@ -510,6 +510,15 @@ name = "itertools"
 version = "0.10.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b0fd2260e829bddf4cb6ea802289de2f86d6a7a690192fbe91b3f46e0f2c8473"
+dependencies = [
+ "either",
+]
+
+[[package]]
+name = "itertools"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b1c173a5686ce8bfa551b3563d0c2170bf24ca44da99c7ca4bfdab5418c3fe57"
 dependencies = [
  "either",
 ]
@@ -1073,9 +1082,9 @@ dependencies = [
 
 [[package]]
 name = "winnow"
-version = "0.4.1"
+version = "0.5.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ae8970b36c66498d8ff1d66685dc86b91b29db0c7739899012f63a63814b4b28"
+checksum = "7c2e3184b9c4e92ad5167ca73039d0c42476302ab603e2fec4487511f38ccefc"
 dependencies = [
  "memchr",
 ]
