@@ -148,11 +148,11 @@ struct Palette {
 impl Palette {
     pub fn colored() -> Self {
         Self {
-            error: anstyle::AnsiColor::Red.into(),
-            warn: anstyle::AnsiColor::Yellow.into(),
-            info: anstyle::AnsiColor::Blue.into(),
-            good: anstyle::AnsiColor::Green.into(),
-            hint: anstyle::AnsiColor::Blue | anstyle::Effects::DIMMED,
+            error: anstyle::AnsiColor::Red.on_default(),
+            warn: anstyle::AnsiColor::Yellow.on_default(),
+            info: anstyle::AnsiColor::Blue.on_default(),
+            good: anstyle::AnsiColor::Green.on_default(),
+            hint: anstyle::AnsiColor::Blue.on_default() | anstyle::Effects::DIMMED,
         }
     }
 }
