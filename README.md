@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/gitext-rs/git-branch-stash/branch/master/graph/badge.svg)](https://codecov.io/gh/gitext-rs/git-branch-stash)
 [![Documentation](https://img.shields.io/badge/docs-master-blue.svg)][Documentation]
 ![License](https://img.shields.io/crates/l/git-branch-stash.svg)
-[![Crates Status](https://img.shields.io/crates/v/git-branch-stash.svg)](https://crates.io/crates/git-branch-stash)
+[![Crates Status](https://img.shields.io/crates/v/git-branch-stash.svg)][Crates.io]
 
 Dual-licensed under [MIT](LICENSE-MIT) or [Apache 2.0](LICENSE-APACHE)
 
