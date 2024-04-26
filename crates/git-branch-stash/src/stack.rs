@@ -1,4 +1,4 @@
-pub use super::Snapshot;
+pub(crate) use super::Snapshot;
 
 /// Manage branch snapshots on disk
 #[derive(Clone, Debug, PartialEq, Eq)]
