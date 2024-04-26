@@ -149,7 +149,7 @@ impl GitRepo {
             .branches(Some(git2::BranchType::Local))
             .into_iter()
             .flatten()
-            .flat_map(move |branch| {
+            .filter_map(move |branch| {
                 let (branch, _) = branch.ok()?;
                 let name = if let Some(name) = branch.name().ok().flatten() {
                     name

@@ -4,22 +4,22 @@
         args_conflicts_with_subcommands = true,
         color = concolor_clap::color_choice(),
     )]
-pub struct Args {
+pub(crate) struct Args {
     #[command(subcommand)]
-    pub subcommand: Option<Subcommand>,
+    pub(crate) subcommand: Option<Subcommand>,
 
     #[command(flatten)]
-    pub push: PushArgs,
+    pub(crate) push: PushArgs,
 
     #[command(flatten)]
     pub(crate) color: concolor_clap::Color,
 
     #[command(flatten)]
-    pub verbose: clap_verbosity_flag::Verbosity<clap_verbosity_flag::InfoLevel>,
+    pub(crate) verbose: clap_verbosity_flag::Verbosity<clap_verbosity_flag::InfoLevel>,
 }
 
 #[derive(Debug, clap::Subcommand)]
-pub enum Subcommand {
+pub(crate) enum Subcommand {
     /// Stash all branches
     Push(PushArgs),
     /// List all stashed snapshots
@@ -37,46 +37,46 @@ pub enum Subcommand {
 }
 
 #[derive(Debug, clap::Args)]
-pub struct PushArgs {
+pub(crate) struct PushArgs {
     /// Specify which stash stack to use
     #[arg(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
-    pub stack: String,
+    pub(crate) stack: String,
 
     /// Annotate the snapshot with the given message
     #[arg(short, long)]
-    pub message: Option<String>,
+    pub(crate) message: Option<String>,
 }
 
 #[derive(Debug, clap::Args)]
-pub struct ListArgs {
+pub(crate) struct ListArgs {
     /// Specify which stash stack to use
     #[arg(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
-    pub stack: String,
+    pub(crate) stack: String,
 }
 
 #[derive(Debug, clap::Args)]
-pub struct ClearArgs {
+pub(crate) struct ClearArgs {
     /// Specify which stash stack to use
     #[arg(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
-    pub stack: String,
+    pub(crate) stack: String,
 }
 
 #[derive(Debug, clap::Args)]
-pub struct DropArgs {
+pub(crate) struct DropArgs {
     /// Specify which stash stack to use
     #[arg(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
-    pub stack: String,
+    pub(crate) stack: String,
 }
 
 #[derive(Debug, clap::Args)]
-pub struct ApplyArgs {
+pub(crate) struct ApplyArgs {
     /// Specify which stash stack to use
     #[arg(default_value = git_branch_stash::Stack::DEFAULT_STACK)]
-    pub stack: String,
+    pub(crate) stack: String,
 }
 
 #[derive(Debug, clap::Args)]
-pub struct StacksArgs {}
+pub(crate) struct StacksArgs {}
 
 #[cfg(test)]
 mod test {
@@ -85,6 +85,6 @@ mod test {
     #[test]
     fn verify_app() {
         use clap::CommandFactory;
-        Args::command().debug_assert()
+        Args::command().debug_assert();
     }
 }

@@ -146,7 +146,7 @@ struct Palette {
 }
 
 impl Palette {
-    pub fn colored() -> Self {
+    pub(crate) fn colored() -> Self {
         Self {
             error: anstyle::AnsiColor::Red.on_default(),
             warn: anstyle::AnsiColor::Yellow.on_default(),
@@ -243,7 +243,7 @@ fn is_dirty(repo: &git_branch_stash::GitRepo) -> bool {
             "Repository is dirty: {}",
             status
                 .iter()
-                .flat_map(|s| s.path().map(|s| s.to_owned()))
+                .filter_map(|s| s.path().map(|s| s.to_owned()))
                 .join(", ")
         );
         true
