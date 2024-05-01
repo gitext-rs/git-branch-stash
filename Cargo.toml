@@ -133,7 +133,7 @@ anstyle = "1.0.6"
 
 git-branch-stash = { version = "0.10.0", path = "crates/git-branch-stash" }
 git2 = { version = ">=0.16, <=0.18", default-features = false, features = ["vendored-libgit2"] }
-serde_json = "1.0.115"
+serde_json = "1.0.116"
 itertools = "0.12.1"
 
 [profile.dev]
