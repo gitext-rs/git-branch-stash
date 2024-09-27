@@ -97,7 +97,7 @@ fn list(args: args::ListArgs) -> proc_exit::ExitResult {
                 writeln!(
                     stdout,
                     "{}",
-                    Styled::new(format_args!("Message: {}", message), style)
+                    Styled::new(format_args!("Message: {message}"), style)
                 )
                 .with_code(proc_exit::Code::FAILURE)?;
             }
@@ -125,7 +125,7 @@ fn list(args: args::ListArgs) -> proc_exit::ExitResult {
             writeln!(
                 stdout,
                 "{}",
-                Styled::new(format_args!("- {}: {}", name, summary), style),
+                Styled::new(format_args!("- {name}: {summary}"), style),
             )
             .with_code(proc_exit::Code::FAILURE)?;
         }
