@@ -118,7 +118,7 @@ doc = false
 
 [dependencies]
 clap = { version = "4.5.4", features = ["derive"] }
-clap-verbosity-flag = "2.2.0"
+clap-verbosity-flag = "3.0.0"
 env_logger = { version = "0.11.3", default-features = false, features = ["auto-color"] }
 log = "0.4.21"
 proc-exit = "2.0.1"
