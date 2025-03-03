@@ -25,7 +25,7 @@ fn run() -> proc_exit::ExitResult {
     args.color.apply();
     let colored_stderr = concolor::get(concolor::Stream::Stderr).ansi_color();
 
-    logger::init_logging(args.verbose.clone(), colored_stderr);
+    logger::init_logging(args.verbose, colored_stderr);
 
     let subcommand = args.subcommand;
     let push_args = args.push;
