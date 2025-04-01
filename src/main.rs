@@ -271,15 +271,11 @@ fn stash_push(repo: &mut git_branch_stash::GitRepo, context: &str) -> Option<git
 
     match stash_id {
         Ok(stash_id) => {
-            log::info!(
-                "Saved working directory and index state {}: {}",
-                stash_msg,
-                stash_id
-            );
+            log::info!("Saved working directory and index state {stash_msg}: {stash_id}");
             Some(stash_id)
         }
         Err(err) => {
-            log::debug!("Failed to stash: {}", err);
+            log::debug!("Failed to stash: {err}");
             None
         }
     }
@@ -304,10 +300,10 @@ fn stash_pop(repo: &mut git_branch_stash::GitRepo, stash_id: Option<git2::Oid>) 
 
         match repo.raw_mut().stash_pop(index, None) {
             Ok(()) => {
-                log::info!("Dropped refs/stash {}", stash_id);
+                log::info!("Dropped refs/stash {stash_id}");
             }
             Err(err) => {
-                log::error!("Failed to pop {} from stash: {}", stash_id, err);
+                log::error!("Failed to pop {stash_id} from stash: {err}");
             }
         }
     }
