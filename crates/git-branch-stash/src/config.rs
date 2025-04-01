@@ -17,7 +17,7 @@ impl RepoConfig {
         let default_config = match git2::Config::open_default() {
             Ok(config) => Some(config),
             Err(err) => {
-                log::debug!("Failed to load git config: {}", err);
+                log::debug!("Failed to load git config: {err}");
                 None
             }
         };
@@ -40,7 +40,7 @@ impl RepoConfig {
             match git2::Config::open(&config_path) {
                 Ok(config) => Ok(Self::from_gitconfig(&config)),
                 Err(err) => {
-                    log::debug!("Failed to load git config: {}", err);
+                    log::debug!("Failed to load git config: {err}");
                     Ok(Default::default())
                 }
             }
@@ -59,7 +59,7 @@ impl RepoConfig {
             match git2::Config::open(&config_path) {
                 Ok(config) => Ok(Self::from_gitconfig(&config)),
                 Err(err) => {
-                    log::debug!("Failed to load git config: {}", err);
+                    log::debug!("Failed to load git config: {err}");
                     Ok(Default::default())
                 }
             }
@@ -88,7 +88,7 @@ impl RepoConfig {
         let mut config = Self::default();
 
         for (key, value) in iter {
-            log::trace!("Env config: {}={:?}", key, value);
+            log::trace!("Env config: {key}={value:?}");
             if key == PROTECTED_STACK_FIELD {
                 if let Some(value) = value {
                     config
@@ -115,7 +115,7 @@ impl RepoConfig {
         let config = match git2::Config::open_default() {
             Ok(config) => Some(config),
             Err(err) => {
-                log::debug!("Failed to load git config: {}", err);
+                log::debug!("Failed to load git config: {err}");
                 None
             }
         };

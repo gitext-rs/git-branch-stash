@@ -76,12 +76,12 @@ impl Snapshot {
 
         for (_old_id, new_id, name) in &planned_changes {
             if head_branch_name == Some(name) {
-                log::debug!("Restoring {} (HEAD)", name);
+                log::debug!("Restoring {name} (HEAD)");
                 repo.detach()?;
                 repo.branch(name, *new_id)?;
                 repo.switch(name)?;
             } else {
-                log::debug!("Restoring {}", name);
+                log::debug!("Restoring {name}");
                 repo.branch(name, *new_id)?;
             }
         }
