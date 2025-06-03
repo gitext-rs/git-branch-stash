@@ -12,7 +12,3 @@ pub use stack::Stack;
 mod git;
 mod snapshot;
 mod stack;
-
-#[doc = include_str!("../README.md")]
-#[cfg(doctest)]
-pub struct ReadmeDoctests;
