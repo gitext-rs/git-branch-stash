@@ -4,9 +4,10 @@
 
 pub mod config;
 
-pub use git::*;
-pub use snapshot::*;
-pub use stack::*;
+pub use git::GitRepo;
+pub use snapshot::Branch;
+pub use snapshot::Snapshot;
+pub use stack::Stack;
 
 mod git;
 mod snapshot;
