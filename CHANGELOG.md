@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [0.11.2] - 2025-08-05
+
 ## [0.11.1] - 2023-09-01
 
 ### Compatibility
@@ -364,7 +366,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `full` -> `commits`
 
 <!-- next-url -->
-[Unreleased]: https://github.com/gitext-rs/git-branch-stash/compare/v0.11.1...HEAD
+[Unreleased]: https://github.com/gitext-rs/git-branch-stash/compare/v0.11.2...HEAD
+[0.11.2]: https://github.com/gitext-rs/git-branch-stash/compare/v0.11.1...v0.11.2
 [0.11.1]: https://github.com/gitext-rs/git-branch-stash/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/gitext-rs/git-branch-stash/compare/v0.10.4...v0.11.0
 [0.10.4]: https://github.com/gitext-rs/git-branch-stash/compare/v0.10.3...v0.10.4
