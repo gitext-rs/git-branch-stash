@@ -131,7 +131,7 @@ where
 
 impl PartialOrd for Branch {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        Some((&self.name, self.id).cmp(&(&other.name, other.id)))
+        Some(self.cmp(other))
     }
 }
 
