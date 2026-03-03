@@ -12,8 +12,8 @@ include.workspace = true
 
 [dependencies]
 git2 = { version = ">=0.16, <=0.20", default-features = false }
-git-config-env = "0.2.3"
-git2-ext = "0.6.3"
+git-config-env = "1.0.0"
+git2-ext = "1.0.0"
 log = "0.4.29"
 eyre = "0.6.12"
 itertools = "0.14.0"
