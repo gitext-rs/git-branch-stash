@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Compatibility
+
+- Update git2 to 0.21
+- Update MSRV to 1.88
+
 ## [0.11.2] - 2025-08-05
 
 ## [0.11.1] - 2023-09-01
