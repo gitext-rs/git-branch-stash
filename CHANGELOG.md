@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [0.12.0] - 2026-07-01
+
 ### Compatibility
 
 - Update git2 to 0.21
@@ -371,7 +373,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   - `full` -> `commits`
 
 <!-- next-url -->
-[Unreleased]: https://github.com/gitext-rs/git-branch-stash/compare/v0.11.2...HEAD
+[Unreleased]: https://github.com/gitext-rs/git-branch-stash/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/gitext-rs/git-branch-stash/compare/v0.11.2...v0.12.0
 [0.11.2]: https://github.com/gitext-rs/git-branch-stash/compare/v0.11.1...v0.11.2
 [0.11.1]: https://github.com/gitext-rs/git-branch-stash/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/gitext-rs/git-branch-stash/compare/v0.10.4...v0.11.0
