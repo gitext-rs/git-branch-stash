@@ -243,7 +243,7 @@ fn is_dirty(repo: &git_branch_stash::GitRepo) -> bool {
             "Repository is dirty: {}",
             status
                 .iter()
-                .filter_map(|s| s.path().map(|s| s.to_owned()))
+                .filter_map(|s| s.path().map(|s| s.to_owned()).ok())
                 .join(", ")
         );
         true
@@ -256,7 +256,7 @@ fn stash_push(repo: &mut git_branch_stash::GitRepo, context: &str) -> Option<git
         .head()
         .and_then(|r| r.resolve())
         .ok()
-        .and_then(|r| r.shorthand().map(|s| s.to_owned()));
+        .and_then(|r| r.shorthand().map(|s| s.to_owned()).ok());
 
     let stash_msg = format!(
         "WIP on {} ({})",

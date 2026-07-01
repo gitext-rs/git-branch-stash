@@ -63,8 +63,8 @@ impl GitRepo {
             let time = std::time::SystemTime::UNIX_EPOCH
                 + std::time::Duration::from_secs(commit.time().seconds().max(0) as u64);
 
-            let author = commit.author().name().map(|n| self.intern_string(n));
-            let committer = commit.author().name().map(|n| self.intern_string(n));
+            let author = commit.author().name().map(|n| self.intern_string(n)).ok();
+            let committer = commit.author().name().map(|n| self.intern_string(n)).ok();
             let commit = std::rc::Rc::new(Commit {
                 id: commit.id(),
                 tree_id: commit.tree_id(),
@@ -80,7 +80,7 @@ impl GitRepo {
 
     pub(crate) fn head_branch(&self) -> Option<Branch> {
         let resolved = self.repo.head().unwrap().resolve().unwrap();
-        let name = resolved.shorthand()?;
+        let name = resolved.shorthand().ok()?;
         let id = resolved.target()?;
 
         let push_id = self
